@@ -8,7 +8,7 @@ package cn.gmluo.bebetterme.enums;
  */
 public enum KeepEnum {
 
-    Keep_0(-1),
+    Keep_0(0),
     Keep_1(3),
     Keep_2(6),
     Keep_3(9);
