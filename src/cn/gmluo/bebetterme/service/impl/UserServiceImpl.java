@@ -1,8 +1,10 @@
 package cn.gmluo.bebetterme.service.impl;
 
 import cn.gmluo.bebetterme.dao.UserDao;
+import cn.gmluo.bebetterme.service.requesttype.DeleteUserIdList;
 import cn.gmluo.bebetterme.entity.User;
 import cn.gmluo.bebetterme.service.UserService;
+import cn.gmluo.bebetterme.service.requesttype.GetUserList;
 import cn.gmluo.bebetterme.util.PageBean;
 import org.springframework.stereotype.Service;
 
@@ -30,14 +32,14 @@ public class UserServiceImpl implements UserService{
     }
 
     /**
-     * 登陆方法实现(使用邮箱和密码登录)
+     * 登陆验证方法实现(使用用户名和密码登录验证)
      *
      * @param user
      * @return
      */
     @Override
     public User login(User user) {
-        return userDao.findByEmailAndPwd(user);
+        return userDao.findByUserNameAndPassWord(user);
     }
 
     /**
@@ -49,6 +51,11 @@ public class UserServiceImpl implements UserService{
     public void getAllUsers(PageBean<User> pageBean) {
         userDao.getAllUsers(pageBean);
 
+    }
+
+    @Override
+    public void getUserList(PageBean<User> pageBean, GetUserList getUserList) {
+        userDao.getUserList(pageBean,getUserList);
     }
 
     /**
@@ -83,4 +90,16 @@ public class UserServiceImpl implements UserService{
         userDao.deleteUserById(id);
 
     }
+
+    /**
+     * 批量删除用户信息方法实现
+     * @param idList
+     */
+    @Override
+    public void batchDeleteUserById(DeleteUserIdList idList) {
+        for (Integer id:idList.getIdList()){
+            userDao.deleteUserById(id);
+        }
+    }
+
 }

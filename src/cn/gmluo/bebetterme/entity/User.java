@@ -33,6 +33,11 @@ public class User {
      * 生日
      */
     private Date birthday;
+
+    /**
+     * 年龄
+     */
+    private int age;
     /**
      * 性别
      * 1：male
@@ -54,6 +59,7 @@ public class User {
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
                 ", birthday=" + birthday +
+                ", age=" + age +
                 ", gender=" + gender +
                 '}';
     }
@@ -114,6 +120,14 @@ public class User {
         this.birthday = birthday;
     }
 
+    public int getAge() {
+        return age;
+    }
+
+    public void setAge(int age) {
+        this.age = age;
+    }
+
     public int getGender() {
         return gender;
     }
@@ -121,5 +135,4 @@ public class User {
     public void setGender(int gender) {
         this.gender = gender;
     }
-
 }

@@ -1,7 +1,9 @@
 package cn.gmluo.bebetterme.controller;
 
+import cn.gmluo.bebetterme.service.requesttype.DeleteUserIdList;
 import cn.gmluo.bebetterme.entity.User;
 import cn.gmluo.bebetterme.service.UserService;
+import cn.gmluo.bebetterme.service.requesttype.GetUserList;
 import cn.gmluo.bebetterme.util.PageBean;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -54,11 +56,24 @@ public class UserController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "deleteUser",method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteUser",method = RequestMethod.GET)
     public String deleteUser(@RequestParam(value = "id")int id){
         userService.deleteUserById(id);
         return "success";
     }
+
+    /**
+     * 批量删除用户信息
+     * @param idList
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "batchDeleteUser",method = RequestMethod.POST)
+    public String batchDeleteUser(@RequestBody DeleteUserIdList idList){
+        userService.batchDeleteUserById(idList);
+        return "success";
+    }
+
 
     /**
      * 修改用户信息
@@ -81,6 +96,32 @@ public class UserController {
     @RequestMapping(value = "findUserById",method = RequestMethod.GET)
     public User findUserById(@RequestParam(value = "id")int id){
         return userService.findById(id);
+    }
+
+
+    @ResponseBody
+    @RequestMapping(value = "getUerList",method = RequestMethod.POST)
+    public PageBean<User> getUerList(@RequestBody GetUserList getUserList){
+        PageBean<User> pageBean=new PageBean<>();
+        userService.getUserList(pageBean,getUserList);
+        return pageBean;
+    }
+
+    /**
+     * 登录验证方法
+     * @param user
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "login",method = RequestMethod.POST)
+    public String login(@RequestBody User user){
+        User u=new User();
+        u=userService.login(user);
+        if (u!=null&&u.getUserName().equals(user.getUserName())&&u.getPassword().equals(user.getPassword())){
+            return "success";
+        }else {
+            return "loginfail";
+        }
     }
 
 }

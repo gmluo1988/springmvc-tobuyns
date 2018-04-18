@@ -1,6 +1,8 @@
 package cn.gmluo.bebetterme.service;
 
+import cn.gmluo.bebetterme.service.requesttype.DeleteUserIdList;
 import cn.gmluo.bebetterme.entity.User;
+import cn.gmluo.bebetterme.service.requesttype.GetUserList;
 import cn.gmluo.bebetterme.util.PageBean;
 
 /**
@@ -16,7 +18,7 @@ public interface UserService {
     public void register(User user);
 
     /**
-     * 登陆方法
+     * 登陆验证方法
      * @param user
      * @return
      */
@@ -27,6 +29,8 @@ public interface UserService {
      * @param pageBean
      */
     public void getAllUsers(PageBean<User> pageBean);
+
+    public void getUserList(PageBean<User> pageBean, GetUserList getUserList);
 
 
     /**
@@ -47,5 +51,11 @@ public interface UserService {
      * @param id
      */
     public void deleteUserById(int id);
+
+    /**
+     * 批量删除用户信息方法
+     * @param idList
+     */
+    public void batchDeleteUserById(DeleteUserIdList idList);
 
 }

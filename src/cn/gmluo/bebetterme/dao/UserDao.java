@@ -1,6 +1,7 @@
 package cn.gmluo.bebetterme.dao;
 
 import cn.gmluo.bebetterme.entity.User;
+import cn.gmluo.bebetterme.service.requesttype.GetUserList;
 import cn.gmluo.bebetterme.util.PageBean;
 
 /**
@@ -17,12 +18,12 @@ public interface UserDao {
     public void saveUser(User user);
 
     /**
-     * 根据用户登陆Email和PassWord验证用户方法
+     * 根据用户登陆UserName和PassWord验证用户方法
      *
      * @param user
      * @return
      */
-    public User findByEmailAndPwd(User user);
+    public User findByUserNameAndPassWord(User user);
 
     /**
      * 根据用户id查询用户信息方法
@@ -60,6 +61,8 @@ public interface UserDao {
      * 分页获取用户信息方法
      */
     public void getAllUsers(PageBean<User> pageBean);
+
+    public void getUserList(PageBean<User> pageBean, GetUserList getUserList);
 
     /**
      * 查询总记录数方法

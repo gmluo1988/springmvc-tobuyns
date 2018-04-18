@@ -54,7 +54,7 @@ public class BeBetterController {
      * @return
      */
     @ResponseBody
-    @RequestMapping(value = "deleteReport",method = RequestMethod.DELETE)
+    @RequestMapping(value = "deleteReport",method = RequestMethod.GET)
     public String deleteReport(@RequestParam(value = "id")int id){
         beBetterService.deleteReport(id);
         return "success";
