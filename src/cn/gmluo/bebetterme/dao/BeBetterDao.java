@@ -1,6 +1,7 @@
 package cn.gmluo.bebetterme.dao;
 
 import cn.gmluo.bebetterme.entity.BeBetter;
+import cn.gmluo.bebetterme.service.requesttype.GetReportList;
 import cn.gmluo.bebetterme.util.PageBean;
 
 /**
@@ -27,6 +28,13 @@ public interface BeBetterDao {
      * @param pageBean
      */
     public void findAllReports(PageBean<BeBetter> pageBean);
+
+    /**
+     * 根据查询条件获取报告列表方法
+     * @param pageBean
+     * @param getReportList
+     */
+    public void getReportList(PageBean<BeBetter> pageBean, GetReportList getReportList);
 
     /**
      * 获取所有结果行数方法

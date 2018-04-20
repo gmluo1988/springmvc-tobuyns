@@ -1,6 +1,6 @@
 package cn.gmluo.bebetterme.controller;
 
-import cn.gmluo.bebetterme.service.requesttype.DeleteUserIdList;
+import cn.gmluo.bebetterme.service.requesttype.DeleteIdList;
 import cn.gmluo.bebetterme.entity.User;
 import cn.gmluo.bebetterme.service.UserService;
 import cn.gmluo.bebetterme.service.requesttype.GetUserList;
@@ -69,7 +69,7 @@ public class UserController {
      */
     @ResponseBody
     @RequestMapping(value = "batchDeleteUser",method = RequestMethod.POST)
-    public String batchDeleteUser(@RequestBody DeleteUserIdList idList){
+    public String batchDeleteUser(@RequestBody DeleteIdList idList){
         userService.batchDeleteUserById(idList);
         return "success";
     }
@@ -98,7 +98,11 @@ public class UserController {
         return userService.findById(id);
     }
 
-
+    /**
+     * 根据查询条件获取用户信息列表
+     * @param getUserList
+     * @return
+     */
     @ResponseBody
     @RequestMapping(value = "getUerList",method = RequestMethod.POST)
     public PageBean<User> getUerList(@RequestBody GetUserList getUserList){

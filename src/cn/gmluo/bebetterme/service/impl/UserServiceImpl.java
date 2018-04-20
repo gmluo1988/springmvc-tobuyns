@@ -1,7 +1,7 @@
 package cn.gmluo.bebetterme.service.impl;
 
 import cn.gmluo.bebetterme.dao.UserDao;
-import cn.gmluo.bebetterme.service.requesttype.DeleteUserIdList;
+import cn.gmluo.bebetterme.service.requesttype.DeleteIdList;
 import cn.gmluo.bebetterme.entity.User;
 import cn.gmluo.bebetterme.service.UserService;
 import cn.gmluo.bebetterme.service.requesttype.GetUserList;
@@ -16,7 +16,7 @@ import javax.annotation.Resource;
  * Created by gmluo on 2018/4/9.
  */
 @Service("userServiceImpl")
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
     @Resource(name = "userDaoImpl")
     private UserDao userDao;
 
@@ -53,9 +53,15 @@ public class UserServiceImpl implements UserService{
 
     }
 
+    /**
+     * 根据查询条件获取用户信息列表方法实现
+     *
+     * @param pageBean
+     * @param getUserList
+     */
     @Override
     public void getUserList(PageBean<User> pageBean, GetUserList getUserList) {
-        userDao.getUserList(pageBean,getUserList);
+        userDao.getUserList(pageBean, getUserList);
     }
 
     /**
@@ -93,11 +99,12 @@ public class UserServiceImpl implements UserService{
 
     /**
      * 批量删除用户信息方法实现
+     *
      * @param idList
      */
     @Override
-    public void batchDeleteUserById(DeleteUserIdList idList) {
-        for (Integer id:idList.getIdList()){
+    public void batchDeleteUserById(DeleteIdList idList) {
+        for (Integer id : idList.getIdList()) {
             userDao.deleteUserById(id);
         }
     }

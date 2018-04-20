@@ -21,7 +21,7 @@ import java.util.List;
  * Created by gmluo on 2018/4/9.
  */
 @Repository("userDaoImpl")
-public class UserDaoImpl implements UserDao{
+public class UserDaoImpl implements UserDao {
     //IOC容器注入对象jdbcTemplate
     private JdbcTemplate jdbcTemplate;
 
@@ -29,91 +29,98 @@ public class UserDaoImpl implements UserDao{
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    private NowTime nowTime=new NowTime();
+    private NowTime nowTime = new NowTime();
 
     /**
      * 保存用户信息方法实现
+     *
      * @param user
      */
     @Override
     public void saveUser(User user) {
-        String sql ="INSERT INTO user (  UserName, PassWord," +
+        String sql = "INSERT INTO user (  UserName, PassWord," +
                 " Email, Birthday, Age,Gender, " +
                 "DataChange_CreateTime, DataChange_LastTime) VALUES (?,?,?,?,?,?,?,?);";
         jdbcTemplate.update(sql,
-                user.getUserName(),user.getPassword(),
-                user.getEmail(),user.getBirthday(),user.getAge(),user.getGender(),
+                user.getUserName(), user.getPassword(),
+                user.getEmail(), user.getBirthday(), user.getAge(), user.getGender(),
                 nowTime.getNowTime(), nowTime.getNowTime());
 //                this.todayDate(),this.todayDate());
     }
 
     /**
      * 根据用户登陆UserName和PassWord验证用户方法实现
+     *
      * @param user
      * @return
      */
     @Override
     public User findByUserNameAndPassWord(User user) {
         String sql = "SELECT * FROM user WHERE UserName=? AND PassWord=?;";
-        List<User> list=jdbcTemplate.query(sql,new MyResult(),user.getUserName(),user.getPassword());
+        List<User> list = jdbcTemplate.query(sql, new MyResult(), user.getUserName(), user.getPassword());
         return (list != null && list.size() > 0) ? list.get(0) : null;
     }
 
     /**
      * 根据用户id查询用户信息方法实现
+     *
      * @param id
      * @return
      */
     @Override
     public User findById(int id) {
-        String sql ="SELECT * FROM user WHERE Id=?;";
-        List<User> list=jdbcTemplate.query(sql,new MyResult(),id);
+        String sql = "SELECT * FROM user WHERE Id=?;";
+        List<User> list = jdbcTemplate.query(sql, new MyResult(), id);
         return (list != null && list.size() > 0) ? list.get(0) : null;
     }
 
     /**
      * 修改用户信息方法实现
+     *
      * @param user
      */
     @Override
     public void updateUser(User user) {
-        String sql ="UPDATE user SET UserName=?,PassWord=?,Email=?,Birthday=?,Age=?,Gender=?,DataChange_LastTime=?  WHERE Id=?;";
-        jdbcTemplate.update(sql,user.getUserName(),user.getPassword(),user.getEmail(),user.getBirthday(),user.getAge(),user.getGender(),nowTime.getNowTime(),user.getId());
+        String sql = "UPDATE user SET UserName=?,PassWord=?,Email=?,Birthday=?,Age=?,Gender=?,DataChange_LastTime=?  WHERE Id=?;";
+        jdbcTemplate.update(sql, user.getUserName(), user.getPassword(), user.getEmail(), user.getBirthday(), user.getAge(), user.getGender(), nowTime.getNowTime(), user.getId());
 
     }
 
     /**
      * 检查email是否存在方法实现
+     *
      * @param email
      * @return
      */
     @Override
     public boolean emailExist(String email) {
-        String sql ="SELECT Email FROM user WHERE Email=?;";
-        if (jdbcTemplate.queryForObject(sql,String.class)!=null){
+        String sql = "SELECT Email FROM user WHERE Email=?;";
+        if (jdbcTemplate.queryForObject(sql, String.class) != null) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     /**
      * 检查userName是否存在方法实现
+     *
      * @param userName
      * @return
      */
     @Override
     public boolean userNameExist(String userName) {
-        String sql ="SELECT UserName FROM user WHERE UserName=?;";
-        if (jdbcTemplate.queryForObject(sql,String.class)!=null){
+        String sql = "SELECT UserName FROM user WHERE UserName=?;";
+        if (jdbcTemplate.queryForObject(sql, String.class) != null) {
             return true;
-        }else {
+        } else {
             return false;
         }
     }
 
     /**
-     * 分页获取用户信息方法
+     * 分页获取用户信息方法实现
+     *
      * @param pageBean
      */
     @Override
@@ -144,12 +151,18 @@ public class UserDaoImpl implements UserDao{
 
     }
 
+    /**
+     * 根据查询条件获取用户信息列表方法实现
+     *
+     * @param pageBean
+     * @param getUserList
+     */
     @Override
     public void getUserList(PageBean<User> pageBean, GetUserList getUserList) {
-        String uerName=getUserList.getUserName();
-        int pageIndex=getUserList.getPageIndex();
-        int pageSize=getUserList.getPageSize();
-        int totalCount=-1;
+        String uerName = getUserList.getUserName();
+        int pageIndex = getUserList.getPageIndex();
+        int pageSize = getUserList.getPageSize();
+        int totalCount = -1;
 
         // 1.设置当前页码
         pageBean.setCurrentPage(pageIndex);
@@ -158,17 +171,17 @@ public class UserDaoImpl implements UserDao{
         pageBean.setPageCount(pageSize);
 
         // 3.1查询总结果数;设置到pageBean对象中
-        if (uerName==null||uerName.length()<=0){
+        if (uerName == null || uerName.length() <= 0) {
             totalCount = this.getTotalCount();
-        }else {
+        } else {
             totalCount = this.getTotalCountByUserName(uerName);
         }
-        //3.2如果总条数小于0
-        if (totalCount<=0){
+        //3.2如果总条数小于等于0
+        if (totalCount <= 0) {
             pageBean.setTotalCount(0);
             pageBean.setTotalPage(0);
             pageBean.setPageData(null);
-        }else {
+        } else {
             //3.3设置结果总条数
             pageBean.setTotalCount(totalCount);
 
@@ -188,7 +201,7 @@ public class UserDaoImpl implements UserDao{
             int count = pageBean.getPageCount();// 获取需要返回的数据行数
 
             //如果没有传入uerName,即走分页查询
-            if (uerName==null||uerName.length()<=0){
+            if (uerName == null || uerName.length() <= 0) {
                 String sql = "SELECT * FROM user ORDER BY Id DESC LIMIT ?,?;";//倒序查询
                 List<User> userList = jdbcTemplate.query(sql, new MyResult(), index, count);
                 pageBean.setPageData(userList);
@@ -197,7 +210,7 @@ public class UserDaoImpl implements UserDao{
             else {
                 //模糊查询语句UserName LIKE concat('%',?,'%')
                 String sql = "SELECT * FROM user WHERE UserName LIKE concat('%',?,'%') ORDER BY Id DESC LIMIT ?,?;";//倒序查询
-                List<User> userList = jdbcTemplate.query(sql, new MyResult(),uerName,index, count);
+                List<User> userList = jdbcTemplate.query(sql, new MyResult(), uerName, index, count);
                 pageBean.setPageData(userList);
             }
         }
@@ -205,33 +218,36 @@ public class UserDaoImpl implements UserDao{
 
     /**
      * 查询总记录数方法
+     *
      * @return
      */
     @Override
     public int getTotalCount() {
-        String sql ="SELECT count(*) FROM user;";
-        return jdbcTemplate.queryForObject(sql,Integer.class);
+        String sql = "SELECT count(*) FROM user;";
+        return jdbcTemplate.queryForObject(sql, Integer.class);
     }
 
     /**
      * 根据用户名称查询总记录数方法
+     *
      * @param userName
      * @return
      */
-    public int getTotalCountByUserName(String userName){
+    public int getTotalCountByUserName(String userName) {
         //模糊查询语句UserName LIKE concat('%',?,'%')
-        String sql ="SELECT count(*) FROM user WHERE UserName LIKE concat('%',?,'%');";
-        return jdbcTemplate.queryForObject(sql,Integer.class,userName);
+        String sql = "SELECT count(*) FROM user WHERE UserName LIKE concat('%',?,'%');";
+        return jdbcTemplate.queryForObject(sql, Integer.class, userName);
     }
 
     /**
      * 删除用户信息方法实现
+     *
      * @param id
      */
     @Override
     public void deleteUserById(int id) {
-        String sql ="DELETE FROM user WHERE Id=?;";
-        jdbcTemplate.update(sql,id);
+        String sql = "DELETE FROM user WHERE Id=?;";
+        jdbcTemplate.update(sql, id);
 
     }
 
@@ -257,7 +273,7 @@ public class UserDaoImpl implements UserDao{
 
         @Override
         public User mapRow(ResultSet resultSet, int index) throws SQLException {
-            User user=new User();
+            User user = new User();
             user.setId(resultSet.getInt("id"));
             user.setUserName(resultSet.getString("userName"));
             user.setPassword(resultSet.getString("password"));

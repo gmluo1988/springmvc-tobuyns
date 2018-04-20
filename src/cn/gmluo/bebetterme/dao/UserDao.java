@@ -62,6 +62,12 @@ public interface UserDao {
      */
     public void getAllUsers(PageBean<User> pageBean);
 
+    /**
+     * 根据查询条件获取用户信息列表方法
+     *
+     * @param pageBean
+     * @param getUserList
+     */
     public void getUserList(PageBean<User> pageBean, GetUserList getUserList);
 
     /**
